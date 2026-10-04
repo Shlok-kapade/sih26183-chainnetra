@@ -27,13 +27,11 @@ This document provides a deep-dive technical specification of the machine learni
 ├────────┼───────────────────────────────────────────┼────────────────────────────────────────┤
 │ M1     │ Wallet Role Classification                │ LightGBM Multi-class + Isotonic Calib. │
 │ M1b    │ Bitcoin Illicit Transaction Benchmark     │ LightGBM on Elliptic Temporal Split    │
-│ M2     │ Graph Neural Network Role/Risk            │ GraphSAGE / GATv2 on Ego-Graphs (CPU)  │
 │ M3     │ Guided Tracing Search Policy              │ Gradient-Boosted Best-First Traversal  │
 │ M4     │ Layering & Anomaly Detection              │ Isolation Forest + Z-score Deviations  │
 │ M5     │ Exit-Type Decision Layer                  │ Deterministic Multi-Signal Resolver    │
 │ M6     │ Entity Clustering                         │ Deposit-Address-Reuse (DAR) + Co-Spend │
 │ M7     │ Freeze-Urgency Triage                     │ Multi-Factor Triage Equation           │
-│ M8     │ Hazard / Cash-out Survival Model          │ Cox Proportional / Weibull Survival    │
 └────────┴───────────────────────────────────────────┴────────────────────────────────────────┘
 ```
 

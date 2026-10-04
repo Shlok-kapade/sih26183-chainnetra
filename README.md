@@ -98,33 +98,37 @@ ChainNetra incorporates specialized AI/ML models designed specifically for graph
 
 ```text
 ┌─────────────────────────────────────────────────────────────────────────────────────────────┐
-│                                   ChainNetra ML Ecosystem                                   │
+│                                Currently Active System Models                               │
 ├────────┬──────────────────────────────────────────────────────────┬─────────────────────────┤
 │ Model  │ Purpose & Target                                         │ Underlying Architecture │
 ├────────┼──────────────────────────────────────────────────────────┼─────────────────────────┤
-│ **M1** │ Wallet Role Classifier (Exchange hot/deposit, mixer, etc)│ LightGBM + Isotonic +   │
-│        │ Evaluates 42 topological, temporal, and volume signals.  │ TreeSHAP Explainability │
+│ **M1** │ Wallet Role Classifier (Exchange hot/deposit, mixer, etc)│ LightGBM Multi-class +  │
+│        │ Evaluates 42 topological, temporal, and volume signals.  │ Isotonic Calibrator +   │
+│        │ Artifact: ml/artifacts/m1/v0.1/                          │ TreeSHAP Explainability │
 ├────────┼──────────────────────────────────────────────────────────┼─────────────────────────┤
-│ **M1b**│ Bitcoin Transaction Illicit Scorer                       │ Benchmark LightGBM on   │
-│        │ Evaluated on the standardized Elliptic temporal dataset. │ Elliptic Bitcoin graph  │
-├────────┼──────────────────────────────────────────────────────────┼─────────────────────────┤
-│ **M2** │ Ego-Graph Semi-Supervised Role Scorer                    │ GraphSAGE / GATv2       │
-│        │ 2-hop neighborhood message-passing graph neural network. │ PyTorch Geometric (CPU) │
+│ **M1b**│ Bitcoin Transaction Illicit Scorer                       │ LightGBM Classifier on  │
+│        │ Evaluated on the standardized Elliptic temporal dataset. │ Elliptic Bitcoin Graph  │
+│        │ Artifact: ml/artifacts/m1_elliptic_real/                │ Temporal Split          │
 ├────────┼──────────────────────────────────────────────────────────┼─────────────────────────┤
 │ **M3** │ Guided Tracing Search Policy                             │ Gradient-Boosted Policy │
 │        │ Best-first frontier expansion minimizing API calls.      │ Heuristic Traversal     │
+│        │ Artifact: ml/artifacts/m3/v0.1/                          │ Budget-Constrained      │
 ├────────┼──────────────────────────────────────────────────────────┼─────────────────────────┤
 │ **M4** │ Layering & Structuring Anomaly Detection                 │ Isolation Forest +      │
 │        │ Detects synthetic smurfing and algorithmic sweeps.       │ Z-Score Outlier Indices │
+│        │ Artifact: backend/app/ml/artifacts/m4_anomaly/v1/        │ Unsupervised Outlier    │
 ├────────┼──────────────────────────────────────────────────────────┼─────────────────────────┤
 │ **M5** │ Multi-Signal Exit-Type Resolver                          │ Hierarchical Rules +    │
 │        │ Resolves cash-out points into 8 distinct taxonomy types. │ Calibrated M1 Softmax   │
+│        │ Module: backend/app/attribution/exit_resolver.py         │ Decision Engine         │
 ├────────┼──────────────────────────────────────────────────────────┼─────────────────────────┤
 │ **M6** │ Entity Clustering Engine                                 │ Deposit-Address-Reuse & │
-│        │ Identifies exchange deposit hubs and UTXO co-spends.     │ Union-Find Data Struct  │
+│        │ Identifies exchange deposit hubs and UTXO co-spends.     │ Disjoint-Set Union-Find │
+│        │ Module: backend/app/attribution/clustering.py            │ Graph Clustering        │
 ├────────┼──────────────────────────────────────────────────────────┼─────────────────────────┤
 │ **M7** │ Freeze-Urgency Triage Ranker                             │ Multi-Factor Decision   │
 │        │ Prioritizes bulk complaints by recoverable value & ETA.  │ Optimization Equation   │
+│        │ Module: backend/app/triage/                              │ Ranking Algorithm       │
 └────────┴──────────────────────────────────────────────────────────┴─────────────────────────┘
 ```
 
