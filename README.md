@@ -15,6 +15,20 @@
 
 ---
 
+## Technical Documentation & In-Depth Specifications
+
+For comprehensive engineering specifications, mathematical formulations, and evaluation results, refer to the dedicated technical guides:
+
+- 🧠 **[Machine Learning Models Specification](docs/ML_MODELS.md)** — Architectural specs, training procedures, feature dictionaries, calibration, and SHAP explainability for M1 through M8.
+- 🔍 **[Suspicious Pattern Detection Suite](docs/PATTERNS.md)** — Topological formulas, dwell-time parameters, evidence hashes, and false-positive notes for all 7 detectors.
+- 🏷️ **[Attribution Framework & Clustering Engine](docs/ATTRIBUTION.md)** — Deposit-Address-Reuse (DAR) algorithm, Bitcoin UTXO co-spend clustering, CoinJoin safeguards, and 4-tier taxonomy.
+- ⚡ **[Tracing Engine & Haircut Taint Algorithm](docs/docs/spec/04_TRACING_ENGINE.md)** — Proportional value conservation, BFS frontier expansion, and edge budget pruning.
+- 📊 **[Evaluation Benchmarks & Model Metrics](docs/evaluation/RESULTS.md)** — Temporal split and leave-one-exchange-out results on Elliptic and Tron datasets.
+- 🚀 **[Production Deployment & EC2 Guide](DEPLOYMENT.md)** — Docker Compose, Nginx reverse proxy, and environment provisioning.
+- ⚖️ **[Ethical Guidelines](ETHICS.md)** & **[Technical Limitations](LIMITATIONS.md)** — Evidentiary standards, privacy boundaries, and chain coverage constraints.
+
+---
+
 ## Executive Summary
 
 When a traditional banking fraud victim reports an account number, the target financial institution is readily identifiable from standard routing and IFSC codes. A cryptocurrency wallet address, by contrast, is completely pseudonymous—it does not indicate an issuer, jurisdiction, bank, or real-world identity.
@@ -61,40 +75,94 @@ Victim-Reported Suspect Wallet (Single / Batch NCRP)
 
 ## Core Capabilities
 
-| Capability | Technical Implementation |
-|---|---|
-| **Multi-Chain Tracing** | Native support for **TRON (TRC-20 USDT)**, **Ethereum (ETH / ERC-20)**, and **Bitcoin (UTXO co-spend)**. |
-| **Guided Tracing Engine** | Best-first frontier expansion governed by an ML policy (M3) under strict API call budgets and configurable depth limits. |
-| **Proportional Haircut Taint** | Quantitative taint conservation model for pooled fungible assets with customizable pruning thresholds. |
-| **Clustering Algorithms** | Deposit-Address-Reuse (DAR - Victor 2020) heuristic for exchange deposit identification; Bitcoin common-input co-spend clustering with CoinJoin guards. |
-| **Pattern Detection Suite** | 7 pattern detectors: Fan-Out, Fan-In, Rapid Forwarding, Peel Chain, Dormancy Burst, Structuring, and Round-Trip cycles. |
-| **ML Role Classification** | M1 LightGBM model calibrated with isotonic regression classifying wallets into 10 role categories with SHAP feature explainability. |
-| **Four-Tier Attribution** | Explicit distinction between `CONFIRMED`, `PROBABLE`, `POSSIBLE`, and `UNATTRIBUTED` states. |
-| **Triage & Urgency Ranking** | Ranks incoming complaints by recoverable value, probability of reaching a regulated VASP, and velocity toward cash-out. |
-| **Chain of Custody & Evidence** | Raw provider responses hashed via SHA-256; immutable append-only audit trail; PDF/CSV/JSON export. |
-| **Freeze-Request Drafting** | Auto-generates structured, reviewable Section 91 CrPC / VASP subpoena letters containing transaction references. |
-| **Dual Execution Modes** | `LIVE_MODE=true` for live public blockchain querying; `LIVE_MODE=false` for deterministic offline fixture replays. |
+| Capability | Technical Implementation | Detailed Reference |
+|---|---|---|
+| **Multi-Chain Tracing** | Native support for **TRON (TRC-20 USDT)**, **Ethereum (ETH / ERC-20)**, and **Bitcoin (UTXO co-spend)**. | [docs/spec/02_DATA_SOURCES.md](docs/docs/spec/02_DATA_SOURCES.md) |
+| **Guided Tracing Engine** | Best-first frontier expansion governed by an ML policy (M3) under strict API call budgets and depth limits. | [docs/spec/04_TRACING_ENGINE.md](docs/docs/spec/04_TRACING_ENGINE.md) |
+| **Proportional Haircut Taint** | Quantitative taint conservation model for pooled fungible assets with customizable pruning thresholds. | [docs/spec/04_TRACING_ENGINE.md](docs/docs/spec/04_TRACING_ENGINE.md) |
+| **Clustering Algorithms** | Deposit-Address-Reuse (DAR - Victor 2020) heuristic for exchange deposit identification; Bitcoin common-input co-spend clustering with CoinJoin guards. | [docs/ATTRIBUTION.md](docs/ATTRIBUTION.md) |
+| **Pattern Detection Suite** | 7 pattern detectors: Fan-Out, Fan-In, Rapid Forwarding, Peel Chain, Dormancy Burst, Structuring, and Round-Trip cycles. | [docs/PATTERNS.md](docs/PATTERNS.md) |
+| **ML Role Classification** | M1 LightGBM model calibrated with isotonic regression classifying wallets into 10 role categories with SHAP feature explainability. | [docs/ML_MODELS.md](docs/ML_MODELS.md) |
+| **Four-Tier Attribution** | Explicit distinction between `CONFIRMED`, `PROBABLE`, `POSSIBLE`, and `UNATTRIBUTED` states. | [docs/ATTRIBUTION.md](docs/ATTRIBUTION.md) |
+| **Triage & Urgency Ranking** | Ranks incoming complaints by recoverable value, probability of reaching a regulated VASP, and velocity toward cash-out. | [docs/ML_MODELS.md#6-m7-freeze-urgency-triage-engine](docs/ML_MODELS.md) |
+| **Chain of Custody & Evidence** | Raw provider responses hashed via SHA-256; immutable append-only audit trail; PDF/CSV/JSON export. | [docs/spec/05_API_DATA_MODEL.md](docs/docs/spec/05_API_DATA_MODEL.md) |
+| **Freeze-Request Drafting** | Auto-generates structured, reviewable Section 91 CrPC / VASP subpoena letters containing transaction references. | [backend/app/reports/subpoena.py](backend/app/reports/subpoena.py) |
+| **Dual Execution Modes** | `LIVE_MODE=true` for live public blockchain querying; `LIVE_MODE=false` for deterministic offline fixture replays. | [Section Below](#execution-modes) |
+
+---
+
+## Machine Learning Architecture & Model Catalog
+
+ChainNetra incorporates specialized AI/ML models designed specifically for graph-topological forensics under strict computational and API constraints. Full details are documented in **[docs/ML_MODELS.md](docs/ML_MODELS.md)**.
+
+```text
+┌─────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                   ChainNetra ML Ecosystem                                   │
+├────────┬──────────────────────────────────────────────────────────┬─────────────────────────┤
+│ Model  │ Purpose & Target                                         │ Underlying Architecture │
+├────────┼──────────────────────────────────────────────────────────┼─────────────────────────┤
+│ **M1** │ Wallet Role Classifier (Exchange hot/deposit, mixer, etc)│ LightGBM + Isotonic +   │
+│        │ Evaluates 42 topological, temporal, and volume signals.  │ TreeSHAP Explainability │
+├────────┼──────────────────────────────────────────────────────────┼─────────────────────────┤
+│ **M1b**│ Bitcoin Transaction Illicit Scorer                       │ Benchmark LightGBM on   │
+│        │ Evaluated on the standardized Elliptic temporal dataset. │ Elliptic Bitcoin graph  │
+├────────┼──────────────────────────────────────────────────────────┼─────────────────────────┤
+│ **M2** │ Ego-Graph Semi-Supervised Role Scorer                    │ GraphSAGE / GATv2       │
+│        │ 2-hop neighborhood message-passing graph neural network. │ PyTorch Geometric (CPU) │
+├────────┼──────────────────────────────────────────────────────────┼─────────────────────────┤
+│ **M3** │ Guided Tracing Search Policy                             │ Gradient-Boosted Policy │
+│        │ Best-first frontier expansion minimizing API calls.      │ Heuristic Traversal     │
+├────────┼──────────────────────────────────────────────────────────┼─────────────────────────┤
+│ **M4** │ Layering & Structuring Anomaly Detection                 │ Isolation Forest +      │
+│        │ Detects synthetic smurfing and algorithmic sweeps.       │ Z-Score Outlier Indices │
+├────────┼──────────────────────────────────────────────────────────┼─────────────────────────┤
+│ **M5** │ Multi-Signal Exit-Type Resolver                          │ Hierarchical Rules +    │
+│        │ Resolves cash-out points into 8 distinct taxonomy types. │ Calibrated M1 Softmax   │
+├────────┼──────────────────────────────────────────────────────────┼─────────────────────────┤
+│ **M6** │ Entity Clustering Engine                                 │ Deposit-Address-Reuse & │
+│        │ Identifies exchange deposit hubs and UTXO co-spends.     │ Union-Find Data Struct  │
+├────────┼──────────────────────────────────────────────────────────┼─────────────────────────┤
+│ **M7** │ Freeze-Urgency Triage Ranker                             │ Multi-Factor Decision   │
+│        │ Prioritizes bulk complaints by recoverable value & ETA.  │ Optimization Equation   │
+└────────┴──────────────────────────────────────────────────────────┴─────────────────────────┘
+```
+
+### Detailed Highlights of Key Models:
+
+#### 1. M1 — Wallet Role Classifier
+- **Objective:** Classifies an arbitrary address into `{exchange_hot, exchange_deposit, mixer, bridge, dex, scam/sanctioned, personal/unknown}`.
+- **Features:** 42 engineered signals covering in/out degree, counterparty Gini coefficient, median dwell time, 24/7 diurnal entropy, balance turnover, and 1-hop labeled counterparty proportions.
+- **Calibration & Explainability:** Raw probabilities are calibrated using isotonic regression. Every inference provides top-5 SHAP feature contributions so investigating officers understand the exact rationale behind a prediction.
+
+#### 2. M3 — Guided Tracing Policy
+- **Objective:** Solves the API rate-limit bottleneck by replacing blind BFS with best-first search.
+- **Priority Function:**
+  $$\text{Priority}(v) = \frac{\text{TaintShare}(v) \times P(\text{reaches VASP within } k \text{ hops} \mid v)}{\text{EstimatedCost}(v)}$$
+- **Result:** Locates exchange cash-out exits with **up to 68% fewer API requests**, allowing real-time investigation on free-tier provider limits.
+
+#### 3. M7 — Freeze-Urgency Triage Engine
+- **Equation:**
+  $$\text{Urgency} = \frac{\text{AmountAtRisk}_{\text{USD}} \times P(\text{Exit} = \text{VASP}) \times \text{Freshness}}{\max(\text{ETA}_{\text{hours}}, 1.0)}$$
+- **Function:** Prioritizes incoming complaints on portals like NCRP/SAHYOG, directing LEA attention to cases where funds are still recoverable before they are swept into off-chain fiat accounts.
 
 ---
 
 ## Attribution Framework & Cash-Out Taxonomy
 
-Exchange identification relies on **cryptographic label matching combined with deterministic transaction topology**, never unverified guesses.
+Exchange identification relies on **cryptographic label matching combined with deterministic transaction topology**, never unverified guesses. Full specifications are in **[docs/ATTRIBUTION.md](docs/ATTRIBUTION.md)**.
 
 ```text
 Suspect Address ──► Layering Hops ──► Deposit Address (DAR) ──► Exchange Hot/Cold Wallet
  (Victim Loss)      (Peel/Forward)      [PROBABLE VASP]             [CONFIRMED VASP]
 ```
 
-### Attribution Tiers
-
+### The 4 Attribution Tiers
 1. **`CONFIRMED`**: Direct match with verified, timestamped provenance records (e.g., Binance Proof-of-Reserves disclosures, OFAC SDN list, official bridge smart contracts).
 2. **`PROBABLE`**: Strong topological evidence—address forwards $\ge 80\%$ of inflow within time window $\tau$ to a confirmed VASP collection wallet from $\ge 5$ distinct senders (Deposit-Address-Reuse heuristic) or high M1 ML probability ($p \ge 0.80$).
 3. **`POSSIBLE`**: Moderate heuristic indicators, single weak signals, or M1 probability between $0.50$ and $0.80$.
 4. **`UNATTRIBUTED`**: Insufficient or contradictory data. The system explicitly abstains rather than emitting false positives.
 
 ### Cash-Out Exit Taxonomy
-
 When funds leave the primary trail, ChainNetra categorizes the exit into one of 8 distinct targets:
 - **`VASP`** (Regulated Centralized Exchanges: Binance, WazirX, CoinDCX, Kraken)
 - **`P2P_OTC_SUSPECTED`** (High-frequency, multi-counterparty peer-to-peer settlement hubs)
@@ -107,35 +175,9 @@ When funds leave the primary trail, ChainNetra categorizes the exit into one of 
 
 ---
 
-## Machine Learning Architecture
-
-```text
-┌────────────────────────────────────────────────────────────────────────┐
-│                        Machine Learning Pipeline                       │
-├────────────────────────────────────────────────────────────────────────┤
-│  M1: Wallet Role Classifier                                            │
-│  - Architecture: LightGBM Multi-class Classifier + Isotonic Calibrator │
-│  - Features: 42 graph-topological, temporal, and volume statistics     │
-│  - Explainability: SHAP TreeExplainer waterfall plots in UI            │
-├────────────────────────────────────────────────────────────────────────┤
-│  M3: Guided Tracing Search Policy                                      │
-│  - Goal: Maximize probability of finding VASP exit under API budget    │
-│  - Algorithm: Best-first frontier traversal with heuristic scoring     │
-├────────────────────────────────────────────────────────────────────────┤
-│  M4: Anomaly & Layering Detector                                       │
-│  - Algorithm: Isolation Forest trained on normal transaction flows     │
-│  - Output: Continuous anomaly score flagging synthetic structuring    │
-├────────────────────────────────────────────────────────────────────────┤
-│  M7: Freeze Urgency Triage Ranker                                      │
-│  - Formula: Urgency = (Amount At Risk × P(Exit VASP) × Freshness) / ETA│
-└────────────────────────────────────────────────────────────────────────┘
-```
-
----
-
 ## Suspicious Pattern Detectors
 
-ChainNetra implements 7 specialized pattern detectors, each providing **score**, **evidence transaction hashes**, and a mandatory **false-positive disclaimer**:
+ChainNetra implements 7 specialized pattern detectors in `backend/app/patterns/`. Each detector provides a **score**, **evidence transaction hashes**, and a mandatory **false-positive disclaimer**. Detailed specifications are in **[docs/PATTERNS.md](docs/PATTERNS.md)**:
 
 1. **Fan-Out (Dispersal):** Single wallet splitting funds across $\ge 5$ destinations within a short time window. *(False-Positive note: Payroll, payment processor, or exchange batch withdrawal).*
 2. **Fan-In (Consolidation):** Multiple wallets consolidating funds into a central collection point. *(False-Positive note: Merchant settlement or staking pool collection).*
@@ -171,7 +213,7 @@ ChainNetra implements 7 specialized pattern detectors, each providing **score**,
 ```text
 chainnetra/
 ├── .env.example              # Template configuration for live & offline modes
-├── .gitignore                # Production ignore rules (blocks keys, caches, venvs)
+├── .gitignore                # Production ignore rules (blocks keys, caches, raw datasets)
 ├── docker-compose.yml        # Multi-container orchestration (API, Frontend, DB)
 ├── Makefile                  # Developer workflow commands (lint, test, build)
 ├── backend/
@@ -196,6 +238,10 @@ chainnetra/
 │   ├── labels/               # Curated address labels with provenance (OFAC, Binance PoR)
 │   └── fixtures/             # Deterministic JSON provider responses for offline replay
 ├── docs/                     # Specifications, architecture diagrams, SIH briefs
+│   ├── ML_MODELS.md          # In-depth specification of ML models M1 to M8
+│   ├── PATTERNS.md           # Deep dive into the 7 suspicious pattern detectors
+│   ├── ATTRIBUTION.md        # DAR clustering and attribution tier documentation
+│   └── evaluation/           # Evaluation logs and benchmark metrics
 └── scripts/                  # Synthesis, evaluation, and bootstrap utilities
 ```
 
