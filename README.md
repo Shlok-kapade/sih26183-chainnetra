@@ -20,13 +20,13 @@
 
 For comprehensive engineering specifications, mathematical formulations, and evaluation results, refer to the dedicated technical guides:
 
-- 🧠 **[Machine Learning Models Specification](docs/ML_MODELS.md)** — Architectural specs, training procedures, feature dictionaries, calibration, and SHAP explainability for M1 through M8.
-- 🔍 **[Suspicious Pattern Detection Suite](docs/PATTERNS.md)** — Topological formulas, dwell-time parameters, evidence hashes, and false-positive notes for all 7 detectors.
-- 🏷️ **[Attribution Framework & Clustering Engine](docs/ATTRIBUTION.md)** — Deposit-Address-Reuse (DAR) algorithm, Bitcoin UTXO co-spend clustering, CoinJoin safeguards, and 4-tier taxonomy.
-- ⚡ **[Tracing Engine & Haircut Taint Algorithm](docs/docs/spec/04_TRACING_ENGINE.md)** — Proportional value conservation, BFS frontier expansion, and edge budget pruning.
-- 📊 **[Evaluation Benchmarks & Model Metrics](docs/evaluation/RESULTS.md)** — Temporal split and leave-one-exchange-out results on Elliptic and Tron datasets.
-- 🚀 **[Production Deployment & EC2 Guide](DEPLOYMENT.md)** — Docker Compose, Nginx reverse proxy, and environment provisioning.
-- ⚖️ **[Ethical Guidelines](ETHICS.md)** & **[Technical Limitations](LIMITATIONS.md)** — Evidentiary standards, privacy boundaries, and chain coverage constraints.
+- **[Machine Learning Models Specification](docs/ML_MODELS.md)** — Architectural specs, training procedures, feature dictionaries, calibration, and SHAP explainability for M1 through M8.
+- **[Suspicious Pattern Detection Suite](docs/PATTERNS.md)** — Topological formulas, dwell-time parameters, evidence hashes, and false-positive notes for all 7 detectors.
+- **[Attribution Framework & Clustering Engine](docs/ATTRIBUTION.md)** — Deposit-Address-Reuse (DAR) algorithm, Bitcoin UTXO co-spend clustering, CoinJoin safeguards, and 4-tier taxonomy.
+- **[Tracing Engine & Haircut Taint Algorithm](docs/docs/spec/04_TRACING_ENGINE.md)** — Proportional value conservation, BFS frontier expansion, and edge budget pruning.
+- **[Evaluation Benchmarks & Model Metrics](docs/evaluation/RESULTS.md)** — Temporal split and leave-one-exchange-out results on Elliptic and Tron datasets.
+- **[Production Deployment & EC2 Guide](DEPLOYMENT.md)** — Docker Compose, Nginx reverse proxy, and environment provisioning.
+- **[Ethical Guidelines](ETHICS.md)** and **[Technical Limitations](LIMITATIONS.md)** — Evidentiary standards, privacy boundaries, and chain coverage constraints.
 
 ---
 
