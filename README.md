@@ -7,6 +7,7 @@
 [![React 18](https://img.shields.io/badge/React-18-61DAFB.svg)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6.svg)](https://www.typescriptlang.org/)
 [![Vite](https://img.shields.io/badge/Vite-6.x-646CFF.svg)](https://vitejs.dev/)
+[![Docker](https://img.shields.io/badge/Docker-Compose%20v2-2496ED.svg)](https://www.docker.com/)
 [![Tests](https://img.shields.io/badge/Pytest-140%20Passed-brightgreen.svg)]()
 [![SIH 2026](https://img.shields.io/badge/SIH%202026-PS%20SIH26183-orange.svg)]()
 
@@ -189,82 +190,153 @@ ChainNetra implements 7 specialized pattern detectors in `backend/app/patterns/`
 
 ---
 
-## Technology Stack
+## Environment Configuration (`.env`)
 
-### Backend
-- **Framework:** Python 3.12, FastAPI, Pydantic v2, Uvicorn
-- **Database & ORM:** PostgreSQL 16, SQLAlchemy 2 (Async), Alembic migrations, SQLite (test fixture mode)
-- **Graph & Network Analysis:** NetworkX (in-memory graph modeling and traversal)
-- **Machine Learning:** LightGBM, scikit-learn, PyTorch, PyTorch Geometric, SHAP, Joblib
-- **Reporting & Export:** ReportLab (vector PDF generation), CSV, JSON
-- **Security:** Argon2 password hashing, JWT tokens, RBAC (Investigator, Supervisor, Admin)
+ChainNetra uses a central `.env` file to manage database connections, authentication secrets, provider API keys, and execution modes.
 
-### Frontend
-- **Framework:** React 18, TypeScript, Vite 6
-- **Styling:** Tailwind CSS, Lucide Icons
-- **Interactive Graphing:** Cytoscape.js with fcose (force-directed compound layout)
-- **Data Management:** TanStack React Query, Axios
-- **Component Architecture:** Modular tabs (Graph, Timeline, Patterns, Attribution, Evidence, Subpoena)
-
----
-
-## Repository Structure
-
-```text
-chainnetra/
-├── .env.example              # Template configuration for live & offline modes
-├── .gitignore                # Production ignore rules (blocks keys, caches, raw datasets)
-├── docker-compose.yml        # Multi-container orchestration (API, Frontend, DB)
-├── Makefile                  # Developer workflow commands (lint, test, build)
-├── backend/
-│   ├── app/
-│   │   ├── api/              # API Endpoints (auth, cases, complaints, evidence, graph, triage)
-│   │   ├── attribution/      # Label store, OFAC ingestion, DAR clustering, tiers
-│   │   ├── core/             # Configuration, security, logging
-│   │   ├── db/               # SQLAlchemy models and session managers
-│   │   ├── graph/            # Graph builder, haircut taint algorithm, export
-│   │   ├── ingest/           # Blockchain adapters (TronGrid, EVM/Blockscout, Bitcoin)
-│   │   ├── ml/               # Model inference (M1 role classifier, M3 policy, features)
-│   │   ├── patterns/         # 7 Suspicious pattern detectors + registry
-│   │   ├── reports/          # ReportLab PDF generator, subpoena builder
-│   │   └── triage/           # Case triage & freeze-urgency ranker
-│   └── tests/                # 140+ unit, integration, and scenario tests
-├── frontend/
-│   ├── src/
-│   │   ├── components/       # Layout, Navbar, Cytoscape graph canvas, tabs
-│   │   ├── pages/            # Dashboard, TriageQueue, CaseWorkspace, NewCase
-│   │   └── lib/              # API client and TypeScript interfaces
-├── data/
-│   ├── labels/               # Curated address labels with provenance (OFAC, Binance PoR)
-│   └── fixtures/             # Deterministic JSON provider responses for offline replay
-├── docs/                     # Specifications, architecture diagrams, SIH briefs
-│   ├── ML_MODELS.md          # In-depth specification of ML models M1 to M8
-│   ├── PATTERNS.md           # Deep dive into the 7 suspicious pattern detectors
-│   ├── ATTRIBUTION.md        # DAR clustering and attribution tier documentation
-│   └── evaluation/           # Evaluation logs and benchmark metrics
-└── scripts/                  # Synthesis, evaluation, and bootstrap utilities
-```
-
----
-
-## Quick Start Guide
-
-### Prerequisites
-- Python 3.12+
-- Node.js 20+ and npm
-- Git
-
-### 1. Clone & Setup Environment
-
+### Step 1: Copy Template File
 ```bash
-git clone https://github.com/Shlok-kapade/sih26183-chainnetra.git
-cd sih26183-chainnetra
-
-# Copy environment variables
 cp .env.example .env
 ```
 
-### 2. Backend Setup
+### Step 2: Configure Environment Variables
+
+```ini
+# ── Database ──────────────────────────────────────────────────────────────────
+# Default Docker connection string (points to the 'db' container).
+# For cloud databases (e.g. AWS RDS), update the host, user, and password accordingly.
+DATABASE_URL=postgresql+asyncpg://chainnetra:changeme@db:5432/chainnetra
+POSTGRES_PASSWORD=changeme
+
+# ── Security & Authentication ─────────────────────────────────────────────────
+# 32-byte hexadecimal secret key for cryptographic JWT signing and session cookies.
+# Generate one using: python3 -c "import secrets; print(secrets.token_hex(32))"
+SECRET_KEY=REPLACE_WITH_STRONG_RANDOM_SECRET
+
+# ── Execution Mode ────────────────────────────────────────────────────────────
+# Set to 'True' for live mainnet queries using external provider APIs.
+# Set to 'False' for deterministic offline demo mode (replays committed test fixtures).
+LIVE_MODE=True
+
+# ── Blockchain Provider API Keys ──────────────────────────────────────────────
+# TronGrid (https://www.trongrid.io) — primary provider for TRON & TRC-20 USDT.
+# Register for a free account at dashboard.trongrid.io to obtain your key.
+TRONGRID_API_KEY=your-trongrid-key-here
+
+# Tronscan (https://tronscan.org) — fallback provider for TRON transactions.
+TRONSCAN_API_KEY=your-tronscan-key-here
+
+# Etherscan (https://etherscan.io) — for Ethereum native ETH and ERC-20 token traces.
+ETHERSCAN_API_KEY=your-etherscan-key-here
+
+# ── Port Binding ──────────────────────────────────────────────────────────────
+# External HTTP port exposed by the Nginx reverse proxy (default: 80).
+# For local evaluation, you can set HTTP_PORT=8080 if port 80 is occupied.
+HTTP_PORT=80
+```
+
+> [!IMPORTANT]
+> **Never commit your `.env` file to GitHub.** The repository's `.gitignore` explicitly prevents `.env` and `*.env` files from being tracked to protect sensitive blockchain API keys and database credentials.
+
+---
+
+## Docker Deployment (Production & Evaluators)
+
+ChainNetra includes a fully containerized **Docker Compose v2** stack that provisions the PostgreSQL database, FastAPI backend, and Nginx-served React frontend in isolated bridge networks.
+
+### Architecture Diagram of the Container Stack
+
+```text
+       Internet / Client Browser (Port 80)
+                       │
+                       ▼
+┌──────────────────────────────────────────────────────────┐
+│  chainnetra-frontend (Nginx Alpine)                      │
+│  - Serves static React 18 production build               │
+│  - Reverse-proxies /api/ requests to the backend service │
+└──────────────────────┬───────────────────────────────────┘
+                       │ Internal Docker Network ('internal')
+                       ▼
+┌──────────────────────────────────────────────────────────┐
+│  chainnetra-backend (Python 3.12 Slim / Uvicorn)         │
+│  - FastAPI REST API on port 8000                         │
+│  - LightGBM, NetworkX, and Forensic Tracing Engine       │
+│  - Mounts ./data as read-only volume for label datasets  │
+│  - Performs periodic health checks via /health           │
+└──────────────────────┬───────────────────────────────────┘
+                       │ Internal Docker Network ('internal')
+                       ▼
+┌──────────────────────────────────────────────────────────┐
+│  chainnetra-db (PostgreSQL 16 Alpine)                    │
+│  - Database on port 5432 (never exposed externally)      │
+│  - Persistent data volume: postgres_data                 │
+│  - Health-checked using pg_isready                       │
+└──────────────────────────────────────────────────────────┘
+```
+
+### Quick Deploy (One Command)
+
+We provide an automated deployment script that validates Docker, builds images in parallel, and verifies service health:
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/Shlok-kapade/sih26183-chainnetra.git
+cd sih26183-chainnetra
+
+# 2. Setup environment variables
+cp .env.example .env
+python3 -c "import secrets; print(f'SECRET_KEY={secrets.token_hex(32)}')" >> .env
+
+# 3. Run automated deploy script
+./deploy.sh
+```
+
+### Manual Docker Compose Commands
+
+Alternatively, you can manage the stack directly with standard Docker Compose commands:
+
+```bash
+# Build and start all services in detached mode
+docker compose up -d --build
+
+# Run database migrations
+docker compose exec backend alembic upgrade head
+
+# Load curated OFAC and Proof-of-Reserves labels into PostgreSQL
+docker compose exec backend python -m app.cli load-labels
+
+# Create default administrative account (interactive prompt)
+docker compose exec backend python -m app.cli create-admin
+
+# Stream live container logs
+docker compose logs -f
+
+# Check health status of all containers
+docker compose ps
+```
+
+Once running, access the application in your browser:
+- **Web Interface:** `http://localhost` (or `http://localhost:8080` if `HTTP_PORT` was changed)
+- **FastAPI Documentation:** `http://localhost/docs`
+- **Health Check Endpoint:** `http://localhost/health`
+
+### Stopping and Tearing Down Containers
+
+```bash
+# Stop containers gracefully while preserving database volumes
+docker compose down
+
+# Stop containers AND wipe database volumes (clean slate)
+docker compose down -v
+```
+
+---
+
+## Local Development (Without Docker)
+
+If you prefer to run the stack natively during development:
+
+### 1. Backend Setup
 
 ```bash
 cd backend
@@ -278,22 +350,19 @@ pytest tests -q
 # Start FastAPI server
 uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 ```
+API docs available at `http://localhost:8000/docs`.
 
-The backend API will be live at `http://localhost:8000`.  
-Interactive OpenAPI documentation: `http://localhost:8000/docs`.
+### 2. Frontend Setup
 
-### 3. Frontend Setup
-
-In a new terminal:
+In a separate terminal:
 
 ```bash
 cd frontend
 npm install
-npm run build    # Verifies TypeScript compilation and bundle generation
-npm run dev      # Launches Vite dev server
+npm run build    # Validates TypeScript compilation
+npm run dev      # Launches Vite dev server with proxy to localhost:8000
 ```
-
-The UI will be accessible at `http://localhost:5173`.
+UI available at `http://localhost:5173`.
 
 ---
 
@@ -302,7 +371,7 @@ The UI will be accessible at `http://localhost:5173`.
 ### 1. Offline Deterministic Mode (`LIVE_MODE=false`)
 - Designed for air-gapped demo environments, hackathon judging, and unit testing.
 - Uses frozen, realistic blockchain responses stored in `data/fixtures/` and demo cases in `backend/app/api/v1/endpoints/cases.py`.
-- **Pre-seeded Cases:**
+- **Pre-seeded Showcase Cases:**
   - `CASE-7281`: Multi-hop TRON USDT fraud trail leading to a Binance deposit address.
   - `CASE-7282`: Ethereum ERC-20 laundering network featuring rapid forwarding and peel-chains.
   - `CASE-7283`: Cross-entity consolidation flow (Fan-in) into an OTC desk.
