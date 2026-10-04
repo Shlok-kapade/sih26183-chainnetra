@@ -1,0 +1,5 @@
+address,chain,entity,entity_type,source
+TKnABDqoTfRms2BNQDUahFqXiR32vufQi8,tron,Binance,exchange,por_binance
+TNVaKWQzau4pirzvwSH17CPvMk4p7yPAn6,tron,Lazarus Group,sanctioned,ofac_sdn
+0x098B716B8Aaf21512996dC57EB0615e2383E2f96,ethereum,Tornado Cash,mixer,ofac_sdn
+0xBE0eB53F46cd790Cd13851d5EFf43D12404d33E8,ethereum,Binance,exchange,por_binance

@@ -1,0 +1,78 @@
+services:
+  # ──────────────────────────────────────────
+  # FastAPI backend
+  # ──────────────────────────────────────────
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: chainnetra-backend
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      # Override any local DB URL to point at the db service
+      DATABASE_URL: postgresql+asyncpg://chainnetra:${POSTGRES_PASSWORD:-chainnetra}@db:5432/chainnetra
+    volumes:
+      # Persist label CSVs and any ML model artefacts
+      - ./data:/app/data:ro
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - internal
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 20s
+
+  # ──────────────────────────────────────────
+  # React frontend served by Nginx
+  # ──────────────────────────────────────────
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: chainnetra-frontend
+    restart: unless-stopped
+    ports:
+      - "${HTTP_PORT:-80}:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - internal
+
+  # ──────────────────────────────────────────
+  # PostgreSQL (optional — only if DB_EXTERNAL=false)
+  # Comment this out if you're using RDS
+  # ──────────────────────────────────────────
+  db:
+    image: postgres:16-alpine
+    container_name: chainnetra-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: chainnetra
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-chainnetra}
+      POSTGRES_DB: chainnetra
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - internal
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U chainnetra -d chainnetra"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    # Do NOT expose 5432 externally in production
+    # ports:
+    #   - "5432:5432"
+
+volumes:
+  postgres_data:
+
+networks:
+  internal:
+    driver: bridge

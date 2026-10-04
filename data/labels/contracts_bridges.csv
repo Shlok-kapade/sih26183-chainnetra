@@ -1,0 +1,2 @@
+address,chain,entity,entity_type,source,source_url,retrieved_at,license,label_confidence
+0xBridge1234567890123456789012345678901234,ethereum,SomeBridge,bridge,community,https://example.com,2026-01-01,public,strong

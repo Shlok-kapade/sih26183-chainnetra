@@ -1,0 +1,139 @@
+{
+  "dataset": {
+    "n_samples": 2100,
+    "n_features": 37,
+    "n_train": 1512,
+    "n_cal": 168,
+    "n_test": 420,
+    "note": "Synthetic dataset \u2014 real-data metrics will differ. See MODEL_CARD.md."
+  },
+  "temporal_split": {
+    "lgbm_macro_f1": 1.0,
+    "lgbm_ece": 0.0,
+    "lgbm_pr_auc_per_class": {
+      "exchange_hot_or_collection": 1.0,
+      "exchange_deposit": 1.0,
+      "mixer": 1.0,
+      "bridge": 1.0,
+      "dex_or_contract": 1.0,
+      "illicit": 1.0,
+      "personal_or_unknown": 1.0
+    },
+    "lr_baseline_macro_f1": 1.0,
+    "lr_pr_auc_per_class": {
+      "exchange_hot_or_collection": 1.0,
+      "exchange_deposit": 1.0,
+      "mixer": 1.0,
+      "bridge": 1.0,
+      "dex_or_contract": 1.0,
+      "illicit": 1.0,
+      "personal_or_unknown": 1.0
+    },
+    "rules_baseline_macro_f1": 0.0357,
+    "ece_before_calibration": 0.0,
+    "ece_after_calibration": 0.0
+  },
+  "leave_one_class_out": {
+    "exchange_hot_or_collection": {
+      "withheld_n_test": 60,
+      "recall_withheld": 0.0,
+      "note": "Proxy leave-one-class-out (real leave-one-exchange-out requires exchange-level labels)"
+    },
+    "exchange_deposit": {
+      "withheld_n_test": 60,
+      "recall_withheld": 0.0,
+      "note": "Proxy leave-one-class-out (real leave-one-exchange-out requires exchange-level labels)"
+    },
+    "mixer": {
+      "withheld_n_test": 60,
+      "recall_withheld": 0.0,
+      "note": "Proxy leave-one-class-out (real leave-one-exchange-out requires exchange-level labels)"
+    },
+    "bridge": {
+      "withheld_n_test": 60,
+      "recall_withheld": 0.0,
+      "note": "Proxy leave-one-class-out (real leave-one-exchange-out requires exchange-level labels)"
+    },
+    "dex_or_contract": {
+      "withheld_n_test": 60,
+      "recall_withheld": 0.0,
+      "note": "Proxy leave-one-class-out (real leave-one-exchange-out requires exchange-level labels)"
+    },
+    "illicit": {
+      "withheld_n_test": 60,
+      "recall_withheld": 0.0,
+      "note": "Proxy leave-one-class-out (real leave-one-exchange-out requires exchange-level labels)"
+    },
+    "personal_or_unknown": {
+      "withheld_n_test": 60,
+      "recall_withheld": 0.0,
+      "note": "Proxy leave-one-class-out (real leave-one-exchange-out requires exchange-level labels)"
+    }
+  },
+  "shap_top_features": {
+    "log_n_out_cp": 0.14615546044434014,
+    "n_out_cp": 0.12802284657537802,
+    "n_in_cp": 0.0993776204759454,
+    "log_n_in_cp": 0.09677634754095066,
+    "n_out_tx": 0.09432998096819803,
+    "log_total_in": 0.09432998054459102,
+    "n_in_tx": 0.09386189247934953
+  },
+  "classification_report_lgbm": {
+    "exchange_hot_or_collection": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 60.0
+    },
+    "exchange_deposit": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 60.0
+    },
+    "mixer": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 60.0
+    },
+    "bridge": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 60.0
+    },
+    "dex_or_contract": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 60.0
+    },
+    "illicit": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 60.0
+    },
+    "personal_or_unknown": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 60.0
+    },
+    "accuracy": 1.0,
+    "macro avg": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 420.0
+    },
+    "weighted avg": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 420.0
+    }
+  }
+}

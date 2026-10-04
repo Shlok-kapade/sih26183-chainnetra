@@ -1,0 +1,15 @@
+@import "tailwindcss";
+
+@theme {
+  --color-chain-ethereum: #627eea;
+  --color-chain-bitcoin: #f7931a;
+  --color-chain-tron: #eb4334;
+  --color-tier-confirmed: #dc2626;
+  --color-tier-probable: #f97316;
+  --color-tier-possible: #eab308;
+  --color-tier-unattributed: #9ca3af;
+}
+
+body {
+  @apply bg-slate-50 text-slate-900 antialiased;
+}

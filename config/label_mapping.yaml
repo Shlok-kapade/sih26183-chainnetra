@@ -1,0 +1,76 @@
+# ChainNetra — Label Mapping Configuration
+# Maps source dataset labels → canonical M1 classes
+# IMPORTANT: Do not add mappings that are not grounded in source documentation.
+# Unknown/unlisted labels always fall through to personal_or_unknown.
+
+label_tiers:
+  CONFIRMED: "Judicially documented or officially verified source"
+  STRONG: "High-quality public attribution with traceable provenance"
+  WEAK: "Community or PoR-based attribution, limited verification"
+  UNKNOWN: "No reliable provenance"
+
+mappings:
+  illicit:
+    # Mendeley Judicial Dataset (CC BY 4.0, v3)
+    - fraud platform           # 詐騙平台 — Taiwanese judicial fraud case facts
+    - pseudo broker            # 假投資仲介 — money mule / facilitator role
+    - illegal broker           # 非法仲介 — unlicensed broker
+    # Generic illicit labels from other sources
+    - money laundering
+    - scam
+    - phishing
+    - sanctioned               # OFAC SDN
+    - ransomware               # BitcoinHeist label family
+    - darknet_market
+    - theft
+    - exploit
+
+  exchange_hot_or_collection:
+    - exchange
+    - hot_wallet
+    - exchange_hot
+    - collection_wallet
+
+  exchange_deposit:
+    - deposit
+    - exchange_deposit
+    - user_deposit
+
+  mixer:
+    - mixer
+    - tumbler
+    - coinjoin_service
+
+  bridge:
+    - bridge
+    - cross_chain_bridge
+
+  dex_or_contract:
+    - dex
+    - defi
+    - contract
+    - smart_contract
+    - amm
+    - router
+
+  personal_or_unknown:
+    - unknown
+    - personal
+    - individual
+    - unattributed
+
+# Addresses whose source label does not appear in any mapping above
+# will be assigned to personal_or_unknown and tagged as UNMAPPED in
+# the provenance record. The original_label is always preserved.
+unmapped_action: personal_or_unknown
+unmapped_tier: UNKNOWN
+
+# Source-specific tier overrides
+source_tiers:
+  mendeley_tron_2026: CONFIRMED      # Judicially grounded
+  ofac_sdn: CONFIRMED               # OFAC SDN list
+  por_binance: WEAK                 # PoR file, limited verification
+  forta_community: WEAK             # Community-sourced
+  bitcoinheist_uci: STRONG          # Peer-reviewed dataset
+  elliptic_2023: STRONG             # Published academic dataset
+  community: WEAK

@@ -1,0 +1,6 @@
+address,chain,entity,entity_type,source,source_url,retrieved_at,license,label_confidence
+TA3rH2A7iHnm6pKH8gr9cK1EZnShnmZdFg,tron,OFAC Sanctioned Entity,sanctioned,ofac_sdn,https://sanctionssearch.ofac.treas.gov,2026-01-01,public_domain,strong
+TNVaKWQzau4pirzvwSH17CPvMk4p7yPAn6,tron,Lazarus Group,sanctioned,ofac_sdn,https://sanctionssearch.ofac.treas.gov,2026-01-01,public_domain,strong
+0x098B716B8Aaf21512996dC57EB0615e2383E2f96,ethereum,Tornado Cash,sanctioned,ofac_sdn,https://sanctionssearch.ofac.treas.gov,2026-01-01,public_domain,strong
+0x1da5821544e25c636c1417ba96ade4cf6d2f9b5a,ethereum,Lazarus Group,sanctioned,ofac_sdn,https://sanctionssearch.ofac.treas.gov,2026-01-01,public_domain,strong
+0x7f367cc41522ce07553e823bf3be79a889debe1b,ethereum,Lazarus Group,sanctioned,ofac_sdn,https://sanctionssearch.ofac.treas.gov,2026-01-01,public_domain,strong

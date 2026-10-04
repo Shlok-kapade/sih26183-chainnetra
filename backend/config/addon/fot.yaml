@@ -1,0 +1,11 @@
+hazard:
+  default_daily_rate: 0.30
+budget:
+  default_api_calls: 500
+  max_pages_per_address: 5
+planner:
+  max_actions: 5
+  act_now_threshold: 0.20
+watch:
+  poll_interval_seconds: 300
+  high_hazard_interval_seconds: 60

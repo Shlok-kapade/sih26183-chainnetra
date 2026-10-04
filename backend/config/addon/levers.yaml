@@ -1,0 +1,10 @@
+levers:
+  VASP_HOLD:
+    binance: {p_success: 0.60, latency_hours: 4, hold_validity_days: 30}
+    okx: {p_success: 0.50, latency_hours: 8, hold_validity_days: 30}
+    default: {p_success: 0.40, latency_hours: 12, hold_validity_days: 14}
+  ISSUER_BLACKLIST:
+    usdt: {p_success: 0.80, latency_hours: 2}
+    usdc: {p_success: 0.85, latency_hours: 1}
+  LEGAL_ESCALATION:
+    default: {p_success: 0.10, latency_hours: 720}

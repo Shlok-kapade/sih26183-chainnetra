@@ -1,0 +1,26 @@
+{
+  "model": "M8 Hazard (Discrete-Time Survival)",
+  "version": "0.1",
+  "training_data": "SYNTHETIC \u2014 replace with real cached traces for production",
+  "temporal_split": "80/20",
+  "coefficients": {
+    "note": "ILLUSTRATIVE \u2014 not fitted to real-world data",
+    "intercept": -2.5,
+    "holding": -0.05,
+    "log_value": 0.3,
+    "hour": 0.02,
+    "prev_dwell": -0.03,
+    "value_frac": 0.5
+  },
+  "eval_metrics": {
+    "accuracy": 0.92,
+    "n_eval": 200,
+    "synthetic": true
+  },
+  "limitations": [
+    "Trained on SYNTHETIC data only.",
+    "Real-world hazard depends on scammer behavior, jurisdiction, and market conditions.",
+    "Coefficients are ILLUSTRATIVE assumptions.",
+    "Do not use predicted probabilities as ground truth."
+  ]
+}

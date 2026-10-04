@@ -1,0 +1,18 @@
+[
+  "hops_so_far",
+  "taint_share",
+  "remaining_budget",
+  "fan_out_width",
+  "top1_forward_share",
+  "dwell_so_far_hours",
+  "value_trend_log",
+  "n_out_cp",
+  "label_proximity",
+  "p_exchange_hot",
+  "p_exchange_deposit",
+  "p_mixer",
+  "p_bridge",
+  "p_dex",
+  "p_illicit",
+  "p_personal"
+]

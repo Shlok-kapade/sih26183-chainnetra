@@ -1,0 +1,10 @@
+weights:
+  coverage_value: 0.40
+  coverage_breadth: 0.20
+  time_compactness: 0.15
+  conservation: 0.15
+  collector_novelty: 0.10
+tiers:
+  CONVERGENCE_CONFIRMED: {min_score: 0.80, requires_verification: true}
+  CONVERGENCE_PROBABLE: {min_score: 0.50}
+  NONE: {min_score: 0.0}

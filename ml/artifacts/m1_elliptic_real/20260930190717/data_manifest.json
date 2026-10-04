@@ -1,0 +1,5 @@
+{
+  "dataset": "elliptic++",
+  "note": "trained on real data",
+  "model_sha256": "1a26c1790934d6080e8f2a971ca42820b2ec0b9c8751edff5bc80fd4e3411e3a"
+}

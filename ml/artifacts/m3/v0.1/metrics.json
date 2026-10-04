@@ -1,0 +1,32 @@
+{
+  "pr_auc": 1.0,
+  "roc_auc": 1.0,
+  "f1_at_threshold_0_5": 1.0,
+  "ece": 0.0,
+  "n_train": 779,
+  "n_test": 103,
+  "n_positive_test": 82,
+  "top_shap_features": [
+    [
+      "taint_share",
+      5.709971048138754
+    ],
+    [
+      "dwell_so_far_hours",
+      2.6868441720466714
+    ],
+    [
+      "value_trend_log",
+      0.3852897460100454
+    ],
+    [
+      "hops_so_far",
+      3.307693250905299e-14
+    ],
+    [
+      "fan_out_width",
+      1.4719735004781024e-14
+    ]
+  ],
+  "data_note": "SYNTHETIC DATA ONLY. Metrics do not reflect real-world investigative recall. Ground-truth only includes exits to labeled VASPs; unlabeled exchanges are invisible."
+}

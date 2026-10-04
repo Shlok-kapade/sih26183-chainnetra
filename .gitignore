@@ -1,0 +1,102 @@
+# ==============================================================================
+# Git Ignore - ChainNetra (SIH 26183)
+# ==============================================================================
+
+# --- Secrets & Environment Variables (CRITICAL: NEVER COMMIT) ---
+.env
+.env.*
+*.env
+*.env.*
+!*.env.example
+!.env.example
+
+# --- Large Datasets, Caches & Archives (NEVER COMMIT TO GIT) ---
+data/raw/
+*/data/raw/
+data/cache/
+*/data/cache/
+data/processed/
+*/data/processed/
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.parquet
+*.feather
+
+# --- Python & Virtual Environments ---
+__pycache__/
+*/__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+downloads/
+eggs/
+.eggs/
+*.egg-info/
+chainnetra_backend.egg-info/
+backend/chainnetra_backend.egg-info/
+.installed.cfg
+*.egg
+.venv/
+*/.venv/
+backend/.venv/
+venv/
+*/venv/
+ENV/
+env/
+
+# --- Testing & Quality Tools ---
+.pytest_cache/
+*/.pytest_cache/
+.ruff_cache/
+*/.ruff_cache/
+.mypy_cache/
+*/.mypy_cache/
+.hypothesis/
+htmlcov/
+.coverage
+.coverage.*
+
+# --- Node & Frontend ---
+node_modules/
+*/node_modules/
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+dist-ssr/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# --- Databases & Runtime Data ---
+*.db
+*.sqlite
+*.sqlite3
+chainnetra.db
+postgres_data/
+*/postgres_data/
+
+# --- Logs & Output ---
+logs/
+*.log
+eval_out.txt
+
+# --- Editor & OS Artifacts ---
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# --- Temporary & Scratch Session Logs ---
+codex-session-*.md
+*.tmp
+*.bak

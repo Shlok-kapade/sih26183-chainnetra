@@ -1,0 +1,14 @@
+# Configuration for M7 Triage and Risk Engine
+
+# Weights for urgency scoring
+weights:
+  value_at_risk_usd: 1.0       # Weight multiplier for the raw USD value
+  prob_exit_hops: 1.0          # How strongly to factor the M3 probability of exit
+  freshness_decay_days: 7.0    # Half-life in days for freshness decay
+
+# Categorical mapping
+severity_thresholds:
+  CRITICAL: 500000.0           # Urgency score > 500k
+  HIGH: 50000.0                # Urgency score > 50k
+  MEDIUM: 5000.0               # Urgency score > 5k
+  LOW: 0.0                     # Urgency score > 0

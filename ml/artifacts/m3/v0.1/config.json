@@ -1,0 +1,29 @@
+{
+  "model_type": "lightgbm_binary",
+  "calibration": "isotonic",
+  "n_traces": 120,
+  "max_budget": 10,
+  "threshold": 0.5,
+  "seed": 42,
+  "feature_names": [
+    "hops_so_far",
+    "taint_share",
+    "remaining_budget",
+    "fan_out_width",
+    "top1_forward_share",
+    "dwell_so_far_hours",
+    "value_trend_log",
+    "n_out_cp",
+    "label_proximity",
+    "p_exchange_hot",
+    "p_exchange_deposit",
+    "p_mixer",
+    "p_bridge",
+    "p_dex",
+    "p_illicit",
+    "p_personal"
+  ],
+  "note": "Trained on synthetic graphs only (synth_laundering.py). Real-world performance unknown. Ground-truth bias: only labeled VASPs counted. See MODEL_CARD.md.",
+  "saved_at": "2026-09-30T19:28:59.575306+00:00",
+  "version": "v0.1"
+}

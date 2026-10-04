@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+.venv/
+venv/
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+.hypothesis/
+.mypy_cache/
+.ruff_cache/
+htmlcov/
+.coverage
+
+# Dev / test artefacts
+tests/
+*.test.py
+eval_*.py
+patch_*.py
+fix_*.py
+
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Git
+.git/
+.gitignore
+
+# Docs / notebooks
+docs/
+*.md
+*.ipynb
+
+# ML training notebooks (model .pkl files are kept via data/ mount)
+ml/
+scripts/
